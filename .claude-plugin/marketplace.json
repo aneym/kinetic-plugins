@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "kinetic-plugins",
+  "description": "Kinetic team Claude Code plugins",
+  "owner": {
+    "name": "Kinetic Apps",
+    "email": "hello@kineticapps.co"
+  },
+  "plugins": [
+    {
+      "name": "claude-code-analytics",
+      "description": "Track Claude Code usage with PostHog analytics",
+      "version": "1.0.0",
+      "author": {
+        "name": "Alex Neyman"
+      },
+      "source": "./plugins/claude-code-analytics"
+    }
+  ]
+}

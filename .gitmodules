@@ -1,0 +1,3 @@
+[submodule "plugins/claude-code-analytics"]
+	path = plugins/claude-code-analytics
+	url = https://github.com/aneym/claude-code-analytics.git
