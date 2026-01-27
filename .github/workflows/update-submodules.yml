@@ -1,0 +1,41 @@
+name: Update Submodules
+
+on:
+  repository_dispatch:
+    types: [plugin-updated]
+  workflow_dispatch:
+    inputs:
+      plugin:
+        description: 'Plugin to update (leave empty for all)'
+        required: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update submodules
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Update all submodules to latest
+          git submodule update --remote --merge
+
+          # Check if there are changes
+          if git diff --quiet; then
+            echo "No submodule updates"
+            exit 0
+          fi
+
+          # Commit and push
+          git add .
+          git commit -m "chore: Update plugin submodules
+
+          Triggered by: ${{ github.event_name }}
+          Plugin: ${{ github.event.client_payload.plugin || 'all' }}"
+          git push
