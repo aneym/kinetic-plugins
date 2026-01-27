@@ -26,6 +26,23 @@ jobs:
           # Update submodules to latest remote commit (no merge)
           git submodule foreach 'git fetch origin && git checkout origin/main'
 
+          # Sync versions from plugin.json to marketplace.json
+          for plugin_dir in plugins/*/; do
+            plugin_name=$(basename "$plugin_dir")
+            plugin_json="$plugin_dir/.claude-plugin/plugin.json"
+
+            if [ -f "$plugin_json" ]; then
+              version=$(jq -r '.version' "$plugin_json")
+              echo "Syncing $plugin_name version: $version"
+
+              # Update version in marketplace.json
+              jq --arg name "$plugin_name" --arg ver "$version" \
+                '(.plugins[] | select(.name == $name)).version = $ver' \
+                .claude-plugin/marketplace.json > tmp.json
+              mv tmp.json .claude-plugin/marketplace.json
+            fi
+          done
+
           # Check if there are changes
           if git diff --quiet; then
             echo "No submodule updates"
