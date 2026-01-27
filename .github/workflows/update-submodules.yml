@@ -23,8 +23,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Update all submodules to latest
-          git submodule update --remote --merge
+          # Update submodules to latest remote commit (no merge)
+          git submodule foreach 'git fetch origin && git checkout origin/main'
 
           # Check if there are changes
           if git diff --quiet; then
